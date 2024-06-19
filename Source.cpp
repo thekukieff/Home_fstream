@@ -2,6 +2,9 @@
 #include <fstream>
 #include <windows.h>
 #include <string>
+#include <vector>
+
+
 
 int Choose(bool arr[]);
 
@@ -10,6 +13,8 @@ void Fill(std::ofstream& txt, bool arr[], int choose, std::string name);
 void Close(std::ofstream& txt);
 
 void Start();
+
+void Read(std::ifstream &name, std::ifstream &count, std::ifstream &price);
 
 int main() {
 	SetConsoleCP(1251);
@@ -22,7 +27,7 @@ int Choose( bool arr[])
 {
 
 	int choose;
-	std::cout << "Â êàêîé ôàéë çàïèñàòü äàííûå?" << std::endl << "1 - Íàçâàíèå òîâàðà;\n 2 - Êîëè÷åñòâî;\n 3 - Öåíà " << std::endl << " 0 - âûõîä\n";
+	std::cout << "Ð’ ÐºÐ°ÐºÐ¾Ð¹ Ñ„Ð°Ð¹Ð» Ð·Ð°Ð¿Ð¸ÑÐ°Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ?" << std::endl << "1 - ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ Ñ‚Ð¾Ð²Ð°Ñ€Ð°;\n 2 - ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾;\n 3 - Ð¦ÐµÐ½Ð° " << std::endl << " 0 - Ð²Ñ‹Ñ…Ð¾Ð´\n";
 	std::cin >> choose;
 	std::cin.ignore(32000, '\n');
 	while (choose < 0 || choose>3) {
@@ -32,20 +37,32 @@ int Choose( bool arr[])
 
 	if (choose == 1) {
 		std::ofstream name;
+
 		Fill(name, arr, choose, "name.txt");
+		
 	}
 	else if (choose == 2) {
 		std::ofstream count;
+
 		Fill(count, arr, choose, "count.txt");
 
 	}
 
 	else if (choose == 3) {
 		std::ofstream price;
+
 		Fill(price, arr, choose, "price.txt");
+
 
 	}
 	else {
+		std::ifstream read_price;
+		read_price.open("price.txt");
+		std::ifstream read_count;
+		read_count.open("count.txt");
+		std::ifstream read_name;
+		read_name.open("name.txt");
+		Read(read_name, read_count, read_price);
 		return 0;
 
 	}
@@ -59,7 +76,7 @@ void Fill(std::ofstream& txt, bool arr[], int choose, std::string name)
 
 
 	if (arr[choose - 1] == true) {
-		std::cout << "Â äîêóìåíòå åñòü äàííûå, ïåðåçàïîëíèòü èëè ïðîäîëæàòü çàïîëíÿòü?\n 1 - ïåðåçàïîëíèòü;\n 2 - ïðîäîëæèòü\n";
+		std::cout << "Ð’ Ð´Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ðµ ÐµÑÑ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ, Ð¿ÐµÑ€ÐµÐ·Ð°Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ Ð¸Ð»Ð¸ Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶Ð°Ñ‚ÑŒ Ð·Ð°Ð¿Ð¾Ð»Ð½ÑÑ‚ÑŒ?\n 1 - Ð¿ÐµÑ€ÐµÐ·Ð°Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ;\n 2 - Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶Ð¸Ñ‚ÑŒ\n";
 		std::cin >> data;
 		std::cin.ignore(32000, '\n');
 		while (data < 1 || data>2) {
@@ -69,14 +86,14 @@ void Fill(std::ofstream& txt, bool arr[], int choose, std::string name)
 		}
 		if (data == 1) {
 			txt.open(name);
-			std::cout << "Ââîäèòå äàííûå\n";
+			std::cout << "Ð’Ð²Ð¾Ð´Ð¸Ñ‚Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ\n";
 			std::getline(std::cin, data_for_file);
 			txt << data_for_file;
 
 		}
 		else {
 			txt.open(name, txt.app);
-			std::cout << "Ââîäèòå äàííûå\n";
+			std::cout << "Ð’Ð²Ð¾Ð´Ð¸Ñ‚Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ\n";
 			std::getline(std::cin, data_for_file);
 			txt << "\n" + data_for_file;
 
@@ -91,7 +108,7 @@ void Fill(std::ofstream& txt, bool arr[], int choose, std::string name)
 		}
 		else {
 
-			std::cout << "Ââîäèòå äàííûå\n";
+			std::cout << "Ð’Ð²Ð¾Ð´Ð¸Ñ‚Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ\n";
 			std::getline(std::cin, data_for_file);
 			txt << data_for_file;
 		}
@@ -101,6 +118,7 @@ void Fill(std::ofstream& txt, bool arr[], int choose, std::string name)
 	}
 	arr[choose - 1] = true;
 	Close(txt);
+
 	system("cls");
 	Choose(arr);
 }
@@ -116,4 +134,50 @@ void Start()
 	bool data[SIZE]{ false, false, false };
 	Choose(data);
 
+}
+
+void Read(std::ifstream &name, std::ifstream &count, std::ifstream &price)
+{
+	int ID = 0;
+	std::string data;
+	int size = 1;
+	std::vector<std::string>name_vector(size);
+
+	while (!name.eof()) {
+		std::getline(name, data);
+		name_vector.insert(name_vector.begin() + ID,data);
+		//name_vector[ID] = data;
+		ID++;
+
+	}
+
+	std::cout << "ID:\t";
+	for (int i = 1; i < ID+1; i++)
+	{
+		std::cout << i << "\t";
+	}
+
+	std::cout << "\nÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ: ";
+
+	for (std::string i : name_vector) {
+		std::cout << i << " ";
+	}
+	
+		
+		std::cout << "\nÐ¦ÐµÐ½Ð°:\t ";
+		while (!price.eof()) {
+			data = "";
+			std::getline(price, data);
+			std::cout << data << ";  ";
+		}
+
+		std::cout << "\nÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾: ";
+		while (!count.eof()) {
+			data = "";
+			std::getline(count, data);
+			std::cout << data << "; ";
+		}
+		name.close();
+		price.close();
+		count.close();
 }
